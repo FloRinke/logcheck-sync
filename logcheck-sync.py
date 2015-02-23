@@ -9,8 +9,6 @@ from git import Repo
 
 
 
-
-
 # TODO move config to extra file (in /etc)
 
 CONFIG_DATADIR = '~/logcheck-sync'
@@ -24,7 +22,7 @@ REPODIR = os.path.expanduser(os.path.join(CONFIG_DATADIR, CONFIG_REPODIR))
 KNOWN_FILE = 'known'
 USED_FILE = 'used'
 
-# cofigurable logging
+# configurable logging
 log = logging.getLogger('main')
 logging.addLevelName(15, 'NOTICE')
 log.setLevel(logging.DEBUG)
