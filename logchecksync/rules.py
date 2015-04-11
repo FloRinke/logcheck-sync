@@ -7,7 +7,7 @@ import shutil
 import logging
 import logging.config
 
-from logchecksync.config import get_system
+from logchecksync import config
 
 LOG = logging.getLogger(__name__)
 
@@ -17,37 +17,37 @@ def show_status():
     init_complete = False
 
     LOG.info("-- logcheck-sync data status --")
-    if not os.path.isdir(get_system('data_dir')):
-        LOG.info('[x] datadir missing [%s]', get_system('data_dir'))
-        print('[x] datadir missing [{0}]'.format(get_system('data_dir')))
+    if not os.path.isdir(config.get('data_dir')):
+        LOG.info('[x] datadir missing [%s]', config.get('data_dir'))
+        print('[x] datadir missing [{0}]'.format(config.get('data_dir')))
     else:
-        LOG.info('[x] datadir exists [%s]', get_system('data_dir'))
-        print('[x] datadir exists [{0}]'.format(get_system('data_dir')))
-        if os.path.isfile(os.path.join(get_system('data_dir'), get_system('known_file'))):
-            LOG.info('[x]  knownfile exists [%s]', os.path.join(get_system('data_dir'), get_system('known_file')))
-            print('[x]  knownfile exists [{0}]'.format(os.path.join(get_system('data_dir'), get_system('known_file'))))
+        LOG.info('[x] datadir exists [%s]', config.get('data_dir'))
+        print('[x] datadir exists [{0}]'.format(config.get('data_dir')))
+        if os.path.isfile(os.path.join(config.get('data_dir'), config.get('known_file'))):
+            LOG.info('[x]  knownfile exists [%s]', os.path.join(config.get('data_dir'), config.get('known_file')))
+            print('[x]  knownfile exists [{0}]'.format(os.path.join(config.get('data_dir'), config.get('known_file'))))
         else:
-            LOG.info('[ ]  knownfile missing [%s]', os.path.join(get_system('data_dir'), get_system('known_file')))
-            print('[ ]  knownfile missing [{0}]'.format(os.path.join(get_system('data_dir'), get_system('known_file'))))
-        if os.path.isfile(os.path.join(get_system('data_dir'), get_system('used_file'))):
-            LOG.info('[x]  usedfile exists [%s]', os.path.join(get_system('data_dir'), get_system('used_file')))
-            print('[x]  usedfile exists [{0}]'.format(os.path.join(get_system('data_dir'), get_system('used_file'))))
+            LOG.info('[ ]  knownfile missing [%s]', os.path.join(config.get('data_dir'), config.get('known_file')))
+            print('[ ]  knownfile missing [{0}]'.format(os.path.join(config.get('data_dir'), config.get('known_file'))))
+        if os.path.isfile(os.path.join(config.get('data_dir'), config.get('used_file'))):
+            LOG.info('[x]  usedfile exists [%s]', os.path.join(config.get('data_dir'), config.get('used_file')))
+            print('[x]  usedfile exists [{0}]'.format(os.path.join(config.get('data_dir'), config.get('used_file'))))
         else:
-            LOG.info('[ ] usedfile missing [%s]', os.path.join(get_system('data_dir'), get_system('used_file')))
-            print('[ ] usedfile missing [{0}]'.format(os.path.join(get_system('data_dir'), get_system('used_file'))))
-        if not os.path.isdir(get_system('repo_dir')):
-            LOG.info('[ ] repodir missing [%s]', get_system('data_dir'))
-            print('[ ] repodir missing [{0}]'.format(get_system('data_dir')))
+            LOG.info('[ ] usedfile missing [%s]', os.path.join(config.get('data_dir'), config.get('used_file')))
+            print('[ ] usedfile missing [{0}]'.format(os.path.join(config.get('data_dir'), config.get('used_file'))))
+        if not os.path.isdir(config.get('repo_dir')):
+            LOG.info('[ ] repodir missing [%s]', config.get('data_dir'))
+            print('[ ] repodir missing [{0}]'.format(config.get('data_dir')))
         else:
-            LOG.info('[x]  repodir exists [%s]', get_system('repo_dir'))
-            print('[x]  repodir exists [{0}]'.format(get_system('repo_dir')))
-            if os.path.isdir(os.path.join(get_system('repo_dir'), '.git')):
+            LOG.info('[x]  repodir exists [%s]', config.get('repo_dir'))
+            print('[x]  repodir exists [{0}]'.format(config.get('repo_dir')))
+            if os.path.isdir(os.path.join(config.get('repo_dir'), '.git')):
                 LOG.info('[x]   containing git repository')
                 print('[x]   containing git repository')
                 init_complete = True
             else:
-                LOG.info('[ ]    not containing git repository [%s]', os.path.join(get_system('repo_dir'), '.git'))
-                print('[ ]    not containing git repository [{0}]'.format(os.path.join(get_system('repo_dir'), '.git')))
+                LOG.info('[ ]    not containing git repository [%s]', os.path.join(config.get('repo_dir'), '.git'))
+                print('[ ]    not containing git repository [{0}]'.format(os.path.join(config.get('repo_dir'), '.git')))
     return init_complete
 
 
@@ -75,8 +75,8 @@ def rules_save_file(rules, path):
 def rules_load_repo():
     """load list of rules available in local repo"""
     rules = set()
-    for entry in glob.glob(os.path.join(get_system('repo_dir'), '*', '*')):
-        rules.add(os.path.relpath(entry, get_system('repo_dir')))
+    for entry in glob.glob(os.path.join(config.get('repo_dir'), '*', '*')):
+        rules.add(os.path.relpath(entry, config.get('repo_dir')))
     return rules
 
 
@@ -85,16 +85,16 @@ def rules_diff():
     LOG.debug('Compare known and existing rules')
     print('Compare known and existing rules')
     # load known rules
-    knownrules = rules_load_file(os.path.join(get_system('data_dir'), get_system('known_file')))
+    knownrules = rules_load_file(os.path.join(config.get('data_dir'), config.get('known_file')))
     LOG.debug('  known rules: %s', knownrules)
-    print('  known rules: {0}', knownrules)
+    #print('  known rules: {0}'.format(knownrules))
 
     # load existing rules
-    LOG.debug(' checking for rules in %s', os.path.join(get_system('repo_dir'), '*', '*'))
-    print(' checking for rules in {0}'.format(os.path.join(get_system('repo_dir'), '*', '*')))
+    LOG.debug(' checking for rules in %s', os.path.join(config.get('repo_dir'), '*', '*'))
+    print(' checking for rules in {0}'.format(os.path.join(config.get('repo_dir'), '*', '*')))
     existingrules = rules_load_repo()
     LOG.debug('  existing rules: %s', existingrules)
-    print('  existing rules: {0}', existingrules)
+    #print('  existing rules: {0}'.format(existingrules))
 
     #generate diff
     newrules = existingrules - knownrules
@@ -106,8 +106,8 @@ def rules_diff():
         for line in newrules:
             LOG.warning(" - %s", line)
             print(" - {0}".format(line))
-        LOG.warning("use --ack to acknowledge the change")
-        print("use --ack to acknowledge the change")
+        LOG.warning('use "ack" or "sync --ack" to acknowledge the change')
+        print('use "ack" or "sync --ack" to acknowledge the change')
 
     if len(deletedrules) != 0:
         LOG.warning("Some rules were deleted:")
@@ -115,21 +115,25 @@ def rules_diff():
         for line in deletedrules:
             LOG.warning(" - %s", line)
             print(" - {0}".format(line))
-        LOG.warning("use --ack to acknowledge the change")
-        print("use --ack to acknowledge the change")
+        LOG.warning('use "ack" or "sync --ack" to acknowledge the change')
+        print('use "ack" or "sync --ack" to acknowledge the change')
+
+    if len(newrules) == 0 and len(deletedrules) == 0:
+        LOG.warning("no pending changes, nothing to do")
+        print("no pending changes, nothing to do")
 
 
 def rules_ack():
     """acknowledge all repo-rules as known to local system"""
-    LOG.info('Saving new knownfile to %s', os.path.join(get_system('data_dir'), get_system('known_file')))
-    print('Saving new knownfile to {0}', os.path.join(get_system('data_dir'), get_system('known_file')))
+    LOG.info('Saving new knownfile to %s', os.path.join(config.get('data_dir'), config.get('known_file')))
+    print('Saving new knownfile to {0}'.format(os.path.join(config.get('data_dir'), config.get('known_file'))))
     existingrules = rules_load_repo()
-    rules_save_file(existingrules, os.path.join(get_system('data_dir'), get_system('known_file')))
+    rules_save_file(existingrules, os.path.join(config.get('data_dir'), config.get('known_file')))
 
 
 def rules_list():
     """list rules local system has subscribed to"""
-    rules = rules_load_file(os.path.join(get_system('data_dir'), get_system('used_file')))
+    rules = rules_load_file(os.path.join(config.get('data_dir'), config.get('used_file')))
     if len(rules) == 0:
         print("No rules are currently selected")
     else:
@@ -141,7 +145,7 @@ def rules_list():
 def rules_verify(rules):
     """filter list of rules for being known to local system"""
     verifiedrules = set()
-    knownrules = rules_load_file(os.path.join(get_system('data_dir'), get_system('known_file')))
+    knownrules = rules_load_file(os.path.join(config.get('data_dir'), config.get('known_file')))
     for rule in rules:
         if rule in knownrules:
             verifiedrules.add(rule)
@@ -152,39 +156,39 @@ def rules_add(addrules):
     """add rule subscription(s) to local system"""
     LOG.info('Add rules')
     print('Add rules')
-    currentrules = rules_load_file(os.path.join(get_system('data_dir'), get_system('used_file')))
+    currentrules = rules_load_file(os.path.join(config.get('data_dir'), config.get('used_file')))
     if addrules == ['all']:
         addrules = rules_load_repo()
     newrules = currentrules | rules_verify(addrules)
-    rules_save_file(newrules, os.path.join(get_system('data_dir'), get_system('used_file')))
+    rules_save_file(newrules, os.path.join(config.get('data_dir'), config.get('used_file')))
 
 
 def rules_del(delrules):
     """delete rule subscriptions from local system"""
     LOG.info('Delete rules')
     print('Delete rules')
-    currentrules = rules_load_file(os.path.join(get_system('data_dir'), get_system('used_file')))
+    currentrules = rules_load_file(os.path.join(config.get('data_dir'), config.get('used_file')))
     newrules = set()
     if delrules != ['all']:
         newrules = currentrules - delrules
-    rules_save_file(newrules, os.path.join(get_system('data_dir'), get_system('used_file')))
+    rules_save_file(newrules, os.path.join(config.get('data_dir'), config.get('used_file')))
 
 
 def files_delete():
     """delete all managed rulefiles from system"""
-    path = os.path.join(get_system('logcheck_dir'), 'ignore.d.paranoid', get_system('logcheck_manageprefix') + '*')
+    path = os.path.join(config.get('logcheck_dir'), 'ignore.d.paranoid', config.get('logcheck_manageprefix') + '*')
     # print("checking {0}".format(path))
     for entry in glob.glob(path):
         #print ("delete paranoid: {0}".format(entry))
         os.remove(entry)
 
-    path = os.path.join(get_system('logcheck_dir'), 'ignore.d.server', get_system('logcheck_manageprefix') + '*')
+    path = os.path.join(config.get('logcheck_dir'), 'ignore.d.server', config.get('logcheck_manageprefix') + '*')
     #print("checking {0}".format(path))
     for entry in glob.glob(path):
         #print ("delete server: {0}".format(entry))
         os.remove(entry)
 
-    path = os.path.join(get_system('logcheck_dir'), 'ignore.d.workstation', get_system('logcheck_manageprefix') + '*')
+    path = os.path.join(config.get('logcheck_dir'), 'ignore.d.workstation', config.get('logcheck_manageprefix') + '*')
     #print("checking {0}".format(path))
     for entry in glob.glob(path):
         #print ("delete workstation: {0}".format(entry))
@@ -193,10 +197,10 @@ def files_delete():
 
 def files_copy():
     """copy subscribed files to system"""
-    rules = rules_load_file(os.path.join(get_system('data_dir'), get_system('used_file')))
+    rules = rules_load_file(os.path.join(config.get('data_dir'), config.get('used_file')))
     for entry in rules:
-        src = os.path.join(get_system('repo_dir'), entry)
-        dst = os.path.join(get_system('logcheck_dir'), entry)
+        src = os.path.join(config.get('repo_dir'), entry)
+        dst = os.path.join(config.get('logcheck_dir'), entry)
         # print ("copy: {0} to {1}".format(src, dst))
         shutil.copy(src, dst)
 

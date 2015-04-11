@@ -7,21 +7,23 @@ from setuptools import setup
 # string in below ...
 
 
-def read(fname):
-    return open(os.path.join(os.path.dirname(__file__), fname)).read()
+def read(filename):
+    return open(os.path.join(os.path.dirname(__file__), filename)).read()
 
 setup(
     name="logcheck-sync",
     version="0.0.1",
     author="Florian Rinke",
     author_email="github+logchecksync@florianrinke.de",
-    description=("Sync logcheck-rules from git-repository"),
+    description="Sync logcheck-rules from git-repository",
     license="",
     keywords="logcheck sync configuration management",
     url="https://github.com/FloRinke/logcheck-sync",
-    packages=['logchecksync', 'logchecksync_tests'],
+    packages=['logchecksync'],
     scripts=['bin/logchecksync'],
-    include_package_data = True,
+    data_files=[('/etc/logcheck-sync', ['logchecksync/logcheck-sync.conf']),
+        ('/var/lib/logcheck-sync', ['logchecksync/logging.conf'])],
+    include_package_data=True,
     long_description=read('README.md'),
     classifiers=[
         "Development Status :: 3 - Alpha",

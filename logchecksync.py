@@ -7,16 +7,16 @@ import sys
 import os
 import inspect
 import logging
+import logging.config
+
+from logchecksync import config
 from logchecksync import logchecksync
 
 if __name__ == '__main__':
-    path = os.path.join(os.path.dirname(inspect.getfile(logchecksync)), 'logging.conf')
-    print('path: {0}'.format(path))
-    logging.config.fileConfig(path)
-    LOG = logging.getLogger(__name__)
-
+    #parse commandline
     parser = argparse.ArgumentParser(description='Synchronizes logcheck rules from a git repository')
     subparsers = parser.add_subparsers(help='One of these Commands', metavar='command', dest='command')
+    parser.add_argument('-d', '--debug', help='Use debug config', action='store_true')
 
     parser_status = subparsers.add_parser('status', help='Show Status')
     parser_pull = subparsers.add_parser('pull', help='synchronize repo')
@@ -37,6 +37,17 @@ if __name__ == '__main__':
         sys.exit(1)
 
     args = vars(parser.parse_args())
+
+    #load config
+    config.load_config(args['debug'])
+
+    #initialize logging
+    #print('data_dir: {0}'.format(config.get('data_dir')))
+    path = os.path.join(os.path.dirname(inspect.getfile(config)), 'logging.conf')
+    print('load logging config: {0}'.format(path))
+    logging.config.fileConfig(path)
+    LOG = logging.getLogger(__name__)
+
     LOG.info("cmdline args: %s", args)
 
     sys.exit(logchecksync.run(args))

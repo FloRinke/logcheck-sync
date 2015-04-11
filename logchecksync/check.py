@@ -5,7 +5,7 @@ __author__ = 'Florian Rinke'
 import os
 import logging
 
-from logchecksync.config import get_system
+from logchecksync import config
 
 
 LOG = logging.getLogger(__name__)
@@ -13,8 +13,8 @@ LOG = logging.getLogger(__name__)
 
 def check_pull():
     """check preconditions for action git pull"""
-    if not os.path.isdir(get_system('data_dir')):
-        os.makedirs(get_system('data_dir'))
+    if not os.path.isdir(config.get('data_dir')):
+        os.makedirs(config.get('data_dir'))
     return True
 
 
@@ -23,10 +23,10 @@ def check_ack(output=True):
     retval = True
     if not check_pull():
         retval = False
-    if not os.path.isdir(os.path.join(get_system('repo_dir'), '.git')):
+    if not os.path.isdir(os.path.join(config.get('repo_dir'), '.git')):
         if output:
-            LOG.error("no repo, sync first")
-            print("no repo, sync first")
+            LOG.error("no repo, pull first")
+            print("no repo, pull first")
         retval = False
     return retval
 
@@ -36,7 +36,7 @@ def check_add(output=True):
     retval = True
     if not check_ack(output):
         retval = False
-    if not os.path.isfile(os.path.join(get_system('data_dir'), get_system('known_file'))):
+    if not os.path.isfile(os.path.join(config.get('data_dir'), config.get('known_file'))):
         if output:
             LOG.error("no rulefiles known, ack first")
             print("no rulefiles known, ack first")
@@ -59,7 +59,7 @@ def check_sync(output=True):
     retval = True
     if not check_add(output):
         retval = False
-    if not os.path.isfile(os.path.join(get_system('data_dir'), get_system('used_file'))):
+    if not os.path.isfile(os.path.join(config.get('data_dir'), config.get('used_file'))):
         if output:
             LOG.error("no rulefiles selected, add some first")
             print("no rulefiles selected, add some first")

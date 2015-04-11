@@ -3,7 +3,7 @@ Synchronizes logcheck rules from a git repository
 
 Available command are:
 command | description
---------|--------------------------------------------------
+------- | -------------------------------------------------
 status  | Show Status
 pull    | synchronize repo
 ack     | acknowledge new rulefiles without adding/deleting
