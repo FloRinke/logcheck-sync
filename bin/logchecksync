@@ -7,6 +7,8 @@ import sys
 import os
 import inspect
 import logging
+import logging.config
+
 from logchecksync import logchecksync
 
 if __name__ == '__main__':
@@ -40,6 +42,3 @@ if __name__ == '__main__':
     LOG.info("cmdline args: %s", args)
 
     sys.exit(logchecksync.run(args))
-
-
-
