@@ -2,6 +2,7 @@
 Synchronizes logcheck rules from a git repository
 
 Available command are:
+
 command | description
 ------- | -------------------------------------------------
 status  | Show Status

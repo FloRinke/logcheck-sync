@@ -12,10 +12,10 @@ def read(filename):
 
 setup(
     name="logcheck-sync",
-    version="0.0.1",
+    version="0.1",
     author="Florian Rinke",
     author_email="github+logchecksync@florianrinke.de",
-    description="Sync logcheck-rules from git-repository",
+    description=("Sync logcheck-rules from git-repository"),
     license="",
     keywords="logcheck sync configuration management",
     url="https://github.com/FloRinke/logcheck-sync",
@@ -26,7 +26,7 @@ setup(
     include_package_data=True,
     long_description=read('README.md'),
     classifiers=[
-        "Development Status :: 3 - Alpha",
+        "Development Status :: 4 - Beta",
         "Topic :: System :: Systems Administration",
         "License :: OSI Approved :: BSD License",
         "Programming Language :: Python :: 3",
