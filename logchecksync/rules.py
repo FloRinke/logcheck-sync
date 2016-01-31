@@ -1,11 +1,11 @@
 """Manage local rules and subscriptions"""
 __author__ = 'Florian Rinke'
 
-import os
 import glob
-import shutil
 import logging
 import logging.config
+import os
+import shutil
 
 from logchecksync import config
 
@@ -87,16 +87,16 @@ def rules_diff():
     # load known rules
     knownrules = rules_load_file(os.path.join(config.get('data_dir'), config.get('known_file')))
     LOG.debug('  known rules: %s', knownrules)
-    #print('  known rules: {0}'.format(knownrules))
+    # print('  known rules: {0}'.format(knownrules))
 
     # load existing rules
     LOG.debug(' checking for rules in %s', os.path.join(config.get('repo_dir'), '*', '*'))
     print(' checking for rules in {0}'.format(os.path.join(config.get('repo_dir'), '*', '*')))
     existingrules = rules_load_repo()
     LOG.debug('  existing rules: %s', existingrules)
-    #print('  existing rules: {0}'.format(existingrules))
+    # print('  existing rules: {0}'.format(existingrules))
 
-    #generate diff
+    # generate diff
     newrules = existingrules - knownrules
     deletedrules = knownrules - existingrules
 
@@ -179,19 +179,19 @@ def files_delete():
     path = os.path.join(config.get('logcheck_dir'), 'ignore.d.paranoid', config.get('logcheck_manageprefix') + '*')
     # print("checking {0}".format(path))
     for entry in glob.glob(path):
-        #print ("delete paranoid: {0}".format(entry))
+        # print ("delete paranoid: {0}".format(entry))
         os.remove(entry)
 
     path = os.path.join(config.get('logcheck_dir'), 'ignore.d.server', config.get('logcheck_manageprefix') + '*')
-    #print("checking {0}".format(path))
+    # print("checking {0}".format(path))
     for entry in glob.glob(path):
-        #print ("delete server: {0}".format(entry))
+        # print ("delete server: {0}".format(entry))
         os.remove(entry)
 
     path = os.path.join(config.get('logcheck_dir'), 'ignore.d.workstation', config.get('logcheck_manageprefix') + '*')
-    #print("checking {0}".format(path))
+    # print("checking {0}".format(path))
     for entry in glob.glob(path):
-        #print ("delete workstation: {0}".format(entry))
+        # print ("delete workstation: {0}".format(entry))
         os.remove(entry)
 
 

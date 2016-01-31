@@ -3,17 +3,17 @@
 __author__ = 'Florian Rinke'
 
 import argparse
-import sys
-import os
 import inspect
 import logging
 import logging.config
+import os
+import sys
 
 from logchecksync import config
 from logchecksync import logchecksync
 
 if __name__ == '__main__':
-    #parse commandline
+    # parse commandline
     parser = argparse.ArgumentParser(description='Synchronizes logcheck rules from a git repository')
     subparsers = parser.add_subparsers(help='One of these Commands', metavar='command', dest='command')
     parser.add_argument('-d', '--debug', help='Use debug config', action='store_true')
@@ -38,11 +38,11 @@ if __name__ == '__main__':
 
     args = vars(parser.parse_args())
 
-    #load config
+    # load config
     config.load_config(args['debug'])
 
-    #initialize logging
-    #print('data_dir: {0}'.format(config.get('data_dir')))
+    # initialize logging
+    # print('data_dir: {0}'.format(config.get('data_dir')))
     path = os.path.join(os.path.dirname(inspect.getfile(config)), 'logging.conf')
     print('load logging config: {0}'.format(path))
     logging.config.fileConfig(path)
@@ -51,6 +51,3 @@ if __name__ == '__main__':
     LOG.info("cmdline args: %s", args)
 
     sys.exit(logchecksync.run(args))
-
-
-

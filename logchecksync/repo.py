@@ -1,8 +1,8 @@
 """Access to git repository"""
 __author__ = 'Florian Rinke'
 
-import os
 import logging
+import os
 
 from git import Repo
 

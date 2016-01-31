@@ -3,8 +3,8 @@
 __author__ = 'Florian Rinke'
 
 from logchecksync import check
-from logchecksync import rules
 from logchecksync import repo
+from logchecksync import rules
 
 
 def run(args):
@@ -42,6 +42,7 @@ def run(args):
         if not check.check_pull():
             exit(1)
         repo.repo_pull()
+        rules.rules_diff()
         if args['ack']:
             rules.rules_ack()
         if not check.check_sync():

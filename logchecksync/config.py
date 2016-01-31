@@ -1,10 +1,10 @@
 """Configuration used all over the code"""
 __author__ = 'Florian Rinke'
 
-import os
-import sys
 import configparser
 import logging
+import os
+import sys
 
 SYSTEM = dict()
 
@@ -22,7 +22,7 @@ def load_config(debug=False):
         print("Cannot load config file")
         sys.exit(1)
 
-    config_section = None
+    # config_section = None
 
     if debug:
         config_section = config['debug']
@@ -47,8 +47,7 @@ def get(name):
     else:
         return None
 
-
-#def get_system(name):
+# def get_system(name):
 #    """get datum from system config"""
 #    if name in SYSTEM:
 #        return SYSTEM[name]

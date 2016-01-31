@@ -2,11 +2,10 @@
 
 __author__ = 'Florian Rinke'
 
-import os
 import logging
+import os
 
 from logchecksync import config
-
 
 LOG = logging.getLogger(__name__)
 
