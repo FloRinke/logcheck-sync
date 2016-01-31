@@ -45,10 +45,71 @@ def show_status():
                 LOG.info('[x]   containing git repository')
                 print('[x]   containing git repository')
                 init_complete = True
+                show_used_rules()
             else:
                 LOG.info('[ ]    not containing git repository [%s]', os.path.join(config.get('repo_dir'), '.git'))
                 print('[ ]    not containing git repository [{0}]'.format(os.path.join(config.get('repo_dir'), '.git')))
     return init_complete
+
+
+def show_used_rules():
+    """show which rules are available, ack'd and in use"""
+    LOG.debug('Show known and existing rules')
+    print('Show known and existing rules')
+
+    # load existing rules
+    LOG.debug(' checking for rules in %s', os.path.join(config.get('repo_dir'), '*', '*'))
+    existingrules = rules_load_repo()
+    LOG.debug('  existing rules: %s', existingrules)
+
+    # load known rules
+    knownrules = rules_load_file(os.path.join(config.get('data_dir'), config.get('known_file')))
+    LOG.debug('  known rules: %s', knownrules)
+
+    # load used rules
+    usedrules = rules_load_file(os.path.join(config.get('data_dir'), config.get('used_file')))
+    LOG.debug('  used rules: %s', knownrules)
+
+    # get system rules
+    systemrules = rules_get_system()
+    LOG.debug('  system rules: %s', systemrules)
+
+    allrules = existingrules | knownrules | usedrules | systemrules
+    LOG.debug('  all rules: %s', allrules)
+    allsort = list(allrules)
+    allsort.sort()
+
+    maxlen = len(max(allsort, key=len)) + 2
+    linespec = "|{:" + str(maxlen) + "}|{:8}|{:8}|{:8}|{:8}|"
+    print(linespec.format("Element", "Repo", "known", "used", "system"))
+    for item in allsort:
+        print(linespec.format(item,
+                              "x" if item in existingrules else "",
+                              "x" if item in knownrules else "",
+                              "x" if item in usedrules else "",
+                              "x" if item in systemrules else ""))
+
+    if len(systemrules - usedrules) > 0:
+        LOG.warn('Your system uses repo-rules that are not marked as used": %s', systemrules - usedrules)
+        print('Warning: Your system uses repo-rules that are not marked as used: {}'.format(systemrules - usedrules))
+
+
+def rules_get_system():
+    os.chdir(config.get('logcheck_dir'))
+    rules = set()
+    pattern = os.path.join('ignore.d.paranoid', config.get('logcheck_manageprefix') + '*')
+    for entry in glob.glob(pattern):
+        rules.add(entry)
+
+    pattern = os.path.join('ignore.d.server', config.get('logcheck_manageprefix') + '*')
+    for entry in glob.glob(pattern):
+        rules.add(entry)
+
+    pattern = os.path.join('ignore.d.workstation', config.get('logcheck_manageprefix') + '*')
+    for entry in glob.glob(pattern):
+        rules.add(entry)
+
+    return rules
 
 
 def rules_load_file(path):

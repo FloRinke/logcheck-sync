@@ -14,7 +14,7 @@ def read(filename):
 
 
 setup(name="logcheck-sync",
-      version="0.1",
+      version="0.2",
       author="Florian Rinke",
       author_email="github+logchecksync@florianrinke.de",
       description="Sync logcheck-rules from git-repository",
