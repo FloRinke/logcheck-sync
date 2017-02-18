@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 """run program"""
 
 __author__ = 'Florian Rinke'

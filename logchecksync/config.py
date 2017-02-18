@@ -29,7 +29,7 @@ def load_config(debug=False):
     else:
         config_section = config['DEFAULT']
 
-    SYSTEM['repo_remote'] = config_section.get('repo_remote', 'https://github.com/Lemelisk/logcheck-rules.git')
+    SYSTEM['repo_remote'] = config_section.get('repo_remote', 'https://github.com/FloRinke/logcheck-rules.git')
     SYSTEM['data_dir'] = os.path.expanduser(config_section.get('data_dir', '~/logcheck-sync'))
     SYSTEM['repo_dir'] = os.path.expanduser(os.path.join(SYSTEM['data_dir'],
                                                          config_section.get('repo_dir', 'repo')))
