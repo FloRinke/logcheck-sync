@@ -15,7 +15,7 @@ def read(filename):
 
 
 setup(name="logchecksync",
-      version="0.2",
+      version="0.3",
       author="Florian Rinke",
       author_email="github+logchecksync@florianrinke.de",
       description="Sync logcheck-rules from git-repository",
@@ -36,5 +36,6 @@ setup(name="logchecksync",
                    "Operating System :: POSIX :: Linux",
                    "Intended Audience :: System Administrators",
                    ],
-      requires=['nose']
+      install_requires=['GitPython',],
+      requires=['nose'],
       )
