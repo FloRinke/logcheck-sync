@@ -16,7 +16,7 @@ def show_status():
     """show initialization status of local configuration"""
     init_complete = False
 
-    LOG.info("-- logcheck-sync data status --")
+    LOG.info("-- logchecksync data status --")
     if not os.path.isdir(config.get('data_dir')):
         LOG.info('[x] datadir missing [%s]', config.get('data_dir'))
         print('[x] datadir missing [{0}]'.format(config.get('data_dir')))

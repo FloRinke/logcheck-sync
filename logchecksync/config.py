@@ -14,7 +14,7 @@ LOG = logging.getLogger(__name__)
 def load_config(debug=False):
     """load configuration from local system"""
     config = configparser.ConfigParser()
-    result = config.read('/etc/logcheck-sync/logcheck-sync.conf')
+    result = config.read('/etc/logchecksync/logchecksync.conf')
     LOG.info("Parsed config file: %s", result)
     print("Parsed config file: {0}".format(result))
 
@@ -30,10 +30,10 @@ def load_config(debug=False):
         config_section = config['DEFAULT']
 
     SYSTEM['repo_remote'] = config_section.get('repo_remote', 'https://github.com/FloRinke/logcheck-rules.git')
-    SYSTEM['data_dir'] = os.path.expanduser(config_section.get('data_dir', '~/logcheck-sync'))
+    SYSTEM['data_dir'] = os.path.expanduser(config_section.get('data_dir', '~/logchecksync'))
     SYSTEM['repo_dir'] = os.path.expanduser(os.path.join(SYSTEM['data_dir'],
                                                          config_section.get('repo_dir', 'repo')))
-    SYSTEM['logcheck_dir'] = os.path.expanduser(config_section.get('logcheck_dir', '~/logcheck-sync-root/logcheck/'))
+    SYSTEM['logcheck_dir'] = os.path.expanduser(config_section.get('logcheck_dir', '~/logchecksync-root/logcheck/'))
     SYSTEM['logcheck_manageprefix'] = config_section.get('logcheck_manageprefix', 'repo-')
 
     SYSTEM['known_file'] = config_section.get('known', 'known')
